@@ -1,0 +1,11 @@
+array Byte32 [byte; 32];
+vector Bytes <byte>;
+
+table KVPair { k: Byte32, v: Byte32, }
+vector KVPairVec <KVPair>;
+
+table SMTCase {
+    proof: Bytes,
+    kv_state: KVPairVec,
+    root: Byte32,
+}

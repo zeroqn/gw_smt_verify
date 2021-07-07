@@ -1,0 +1,12 @@
+[package]
+name = "rust_veritfy"
+version = "0.1.0"
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+gw-common = { git = "https://github.com/nervosnetwork/godwoken", rev = "12744ad" }
+molecule = "0.7.1"
+sparse-merkle-tree = { version = "0.4.0-rc1", default-features = false }
+bytes = "0.5"
