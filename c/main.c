@@ -1,11 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include "blake2b.h"
 #include "smt.h"
-#include "ckb_smt.h"
-#include "gw_def.h"
-#include "gw_errors.h"
+#include "gw_smt.h"
 
 #define GW_MAX_KV_PROOF_SIZE 4096
 
@@ -36,8 +33,8 @@ int main() {
 
     uint8_t root[32];
 
-    smt_state_t kv_state;
-    smt_pair_t kv_pairs[GW_MAX_KV_PAIRS];
+    gw_state_t kv_state;
+    gw_pair_t kv_pairs[GW_MAX_KV_PAIRS];
 
     int ret = 0;
 
@@ -53,7 +50,7 @@ int main() {
     mol_seg_t kv_state_seg = MolReader_SMTCase_get_kv_state(&smt_case_seg);
     uint32_t kv_pairs_len = MolReader_KVPairVec_length(&kv_state_seg);
 
-    smt_state_init(&kv_state, kv_pairs, GW_MAX_KV_PAIRS);
+    gw_state_init(&kv_state, kv_pairs, GW_MAX_KV_PAIRS);
     for (uint32_t i = 0; i < kv_pairs_len; i++) {
         mol_seg_res_t kv_res = MolReader_KVPairVec_get(&kv_state_seg, i);
         if (kv_res.errno != MOL_OK) {
@@ -63,14 +60,14 @@ int main() {
 
         mol_seg_t key_seg = MolReader_KVPair_get_k(&kv_res.seg);
         mol_seg_t value_seg = MolReader_KVPair_get_v(&kv_res.seg);
-        ret = smt_state_insert(&kv_state, key_seg.ptr, value_seg.ptr);
+        ret = gw_state_insert(&kv_state, key_seg.ptr, value_seg.ptr);
         if (ret != 0) {
             printf("insert kv failed");
             return ret;
         }
     }
 
-    ret = smt_verify(root, &kv_state, proof, proof_size);
+    ret = gw_smt_verify(root, &kv_state, proof, proof_size);
     if (ret != 0) {
         printf("verify merkle root failed");
         return ret;
