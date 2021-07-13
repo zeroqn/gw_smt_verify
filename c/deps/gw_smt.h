@@ -72,6 +72,9 @@ int _gw_pair_cmp(const void *a, const void *b) {
   return pa->order - pb->order;
 }
 
+typedef int (*cmpfun)(const void *, const void *);
+void qsort(void *base, size_t nel, size_t width, cmpfun cmp);
+
 void gw_state_normalize(gw_state_t *state) {
   for (uint32_t i = 0; i < state->len; i++) {
     state->pairs[i].order = state->len - i;
